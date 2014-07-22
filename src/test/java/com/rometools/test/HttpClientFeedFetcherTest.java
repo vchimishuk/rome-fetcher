@@ -16,12 +16,17 @@
  */
 package com.rometools.test;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-
 import com.rometools.fetcher.FeedFetcher;
 import com.rometools.fetcher.impl.FeedFetcherCache;
 import com.rometools.fetcher.impl.HttpClientFeedFetcher;
+import com.rometools.fetcher.impl.HttpClientFeedFetcher.ContextSupplier;
+
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 
 /**
  * @author Nick Lothian
@@ -42,7 +47,10 @@ public class HttpClientFeedFetcherTest extends AbstractJettyTest {
 
     @Override
     protected FeedFetcher getFeedFetcher(final FeedFetcherCache cache) {
-        return new HttpClientFeedFetcher(cache);
+        HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher();
+        fetcher.setFeedInfoCache(cache);
+
+        return fetcher;
     }
 
     /**
@@ -50,15 +58,19 @@ public class HttpClientFeedFetcherTest extends AbstractJettyTest {
      */
     @Override
     public FeedFetcher getAuthenticatedFeedFetcher() {
-        return new HttpClientFeedFetcher(null, new HttpClientFeedFetcher.CredentialSupplier() {
+        HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher();
+        fetcher.setContextSupplier(new ContextSupplier() {
             @Override
-            public Credentials getCredentials(final String realm, final String host) {
-                if ("localhost".equals(host)) {
-                    return new UsernamePasswordCredentials("username", "password");
-                } else {
-                    return null;
-                }
+            public HttpClientContext getContext(HttpHost host) {
+                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("username:password"));
+                HttpClientContext context = HttpClientContext.create();
+                context.setCredentialsProvider(credentialsProvider);
+
+                return context;
             }
         });
+
+        return fetcher;
     }
 }
