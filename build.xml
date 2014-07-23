@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="yandex-rome-fetcher" basedir="." default="jar">
+  <property environment="env"/>
+  <import file="${env.YANDEX_BUILD}/ivy-ant/ivy-targets.xml"/>
+
+  <property name="ivy.publish.artifact.pattern" value="target/jars/[artifact].[ext]" />
+
+  <target name="clean">
+    <delete dir="target" />
+  </target>
+
+  <target name="compile" depends="ivy-retrieve">
+    <mkdir dir="target/classes" />
+    <javac source="1.6" target="1.6" destdir="target/classes" debug="true" encoding="utf-8" includeantruntime="false">
+      <src path="src/main/java" />
+      <src path="src/test/java" />
+      <classpath>
+        <fileset dir="lib/jars" includes="*.jar" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="target/jars" />
+    <jar destfile="target/jars/yandex-rome-fetcher-${ivy.deliver.revision}-jar.jar">
+      <fileset dir="target/classes" />
+    </jar>
+    <jar destfile="target/jars/yandex-rome-fetcher-${ivy.deliver.revision}-source.jar">
+      <fileset dir="src/main/java" />
+    </jar>
+  </target>
+
+  <target name="test" depends="compile">
+    <junit printsummary="yes" fork="yes" failureproperty="test.failure">
+      <sysproperty key="ant.junit.runner" value="true"/>
+      <jvmarg value="-Dfile.encoding=UTF-8"/>
+      <classpath>
+        <fileset dir="lib/jars" includes="*.jar" />
+        <pathelement location="target/classes"/>
+        <pathelement location="src/main/java"/>
+        <pathelement location="src/test/java"/>
+      </classpath>
+
+
+      <batchtest todir="${basedir}">
+        <fileset dir="target/classes">
+          <include name="**/*Test.class"/>
+        </fileset>
+        <formatter type="plain" usefile="no"/>
+      </batchtest>
+    </junit>
+
+    <fail message="Tests failed" if="test.failure"/>
+  </target>
+
+  <target name="publish" depends="jar">
+    <antcall target="ivy-publish"/>
+    <!-- Report back to teamcity -->
+    <echo message="##teamcity[buildNumber '${ivy.deliver.revision}']" />
+  </target>
+</project>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+  <info organisation="ru.yandex" module="yandex-rome-fetcher">
+    <description>Yandex Rome Fetcher library fork</description>
+  </info>
+
+  <configurations>
+    <conf name="compile"/>
+    <conf name="master"/>
+    <conf name="runtime" extends="compile"/>
+    <conf name="sources"/>
+    <conf name="test"/>
+  </configurations>
+
+  <publications>
+    <artifact name="yandex-rome-fetcher" type="jar" ext="jar" conf="master"/>
+    <artifact name="yandex-rome-fetcher" type="source" ext="jar" conf="sources" m:classifier="sources"/>
+  </publications>
+
+  <dependencies defaultconfmapping="compile->master;sources">
+    <dependency org="rome" name="rome" rev="1.5.0"/>
+    <dependency org="org.jdom2" name="jdom2" rev="2.0.5"/>
+    <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.3.2"/>
+    <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.3.2"/>
+    <dependency org="javax.servlet" name="servlet-api" rev="3.0"/>
+    <dependency org="ch.qos.logback" name="logback-classic" rev="1.1.2"/>
+    <dependency org="ch.qos.logback" name="logback-core" rev="1.1.2"/>
+    <dependency org="org.slf4j" name="slf4j-api" rev="1.6.6"/>
+    <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6"/>
+    <dependency org="junit" name="junit" rev="4.7" conf="test->default"/>
+    <dependency org="jetty" name="org.mortbay.jetty" rev="5.1.12"/>
+  </dependencies>
+
+</ivy-module>
