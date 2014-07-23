@@ -9,7 +9,7 @@
     <delete dir="target" />
   </target>
 
-  <target name="compile" depends="ivy-retrieve">
+  <target name="compile" depends="clean,ivy-retrieve">
     <mkdir dir="target/classes" />
     <javac source="1.6" target="1.6" destdir="target/classes" debug="true" encoding="utf-8" includeantruntime="false">
       <src path="src/main/java" />
@@ -39,12 +39,14 @@
         <pathelement location="target/classes"/>
         <pathelement location="src/main/java"/>
         <pathelement location="src/test/java"/>
+        <pathelement location="src/test/resources"/>
       </classpath>
 
 
       <batchtest todir="${basedir}">
         <fileset dir="target/classes">
           <include name="**/*Test.class"/>
+          <exclude name="**/AbstractJettyTest.class"/>
         </fileset>
         <formatter type="plain" usefile="no"/>
       </batchtest>

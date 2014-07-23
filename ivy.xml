@@ -19,15 +19,18 @@
 
   <dependencies defaultconfmapping="compile->master;sources">
     <dependency org="rome" name="rome" rev="1.5.0"/>
+    <dependency org="rome" name="rome-utils" rev="1.5.0"/>
     <dependency org="org.jdom2" name="jdom2" rev="2.0.5"/>
     <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.3.2"/>
     <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.3.2"/>
+    <dependency org="commons-logging" name="commons-logging" rev="1.1.3"/>
+    <dependency org="commons-codec" name="commons-codec" rev="1.9"/>
     <dependency org="javax.servlet" name="servlet-api" rev="3.0"/>
     <dependency org="ch.qos.logback" name="logback-classic" rev="1.1.2"/>
     <dependency org="ch.qos.logback" name="logback-core" rev="1.1.2"/>
     <dependency org="org.slf4j" name="slf4j-api" rev="1.6.6"/>
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.6"/>
-    <dependency org="junit" name="junit" rev="4.7" conf="test->default"/>
+    <dependency org="junit" name="junit" rev="3.8.2" conf="test->default"/>
     <dependency org="jetty" name="org.mortbay.jetty" rev="5.1.12"/>
   </dependencies>
 
